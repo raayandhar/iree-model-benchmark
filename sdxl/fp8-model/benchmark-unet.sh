@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: PATH=/path/to/iree/build/tools:$PATH ./benchmark-unet.sh N
+# Usage: PATH=/path/to/iree/build/tools:$PATH ./benchmark-unet.sh <hip-device-id> <batch-size> [<ipra-path-prefix>]
 
 set -xeu
 
@@ -28,6 +28,9 @@ INPUTS="--input=@${INPUT_PATH}/run_forward_input_0.npy \
 --input=@${INPUT_PATH}/run_forward_input_6.npy \
 --input=@${INPUT_PATH}/run_forward_input_7.npy"
 
+# IRPA file: https://sharkpublic.blob.core.windows.net/sharkpublic/sdxl-scripts-weights/punet_fp8_weights.irpa
+# Size: 2615300096
+# md5sum: 42df7496dc012548e5fc1a198cb1161d
 IRPA_PATH_PREFIX="${3:-/data/shark}"
 
 "$IREE_BENCHMARK" \
