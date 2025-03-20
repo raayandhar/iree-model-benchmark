@@ -37,7 +37,7 @@ IRPA_PATH_PREFIX="${3:-/data/shark}"
   --device="hip://${HIP_DEVICE}" \
   --device_allocator=caching \
   --module="${SCRIPT_DIR}/tmp/punet_bs${BATCH_SIZE}.vmfb" \
-  --parameters=model=${IRPA_PATH_PREFIX}/punet_fp8_weights.irpa \
+  --parameters=model="${IRPA_PATH_PREFIX}/punet_fp8_weights.irpa" \
   --function=run_forward \
   $INPUTS \
   --benchmark_repetitions=3
