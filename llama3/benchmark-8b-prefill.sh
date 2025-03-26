@@ -14,12 +14,14 @@ readonly WORKING_DIR="${WORKING_DIR:-${SCRIPT_DIR}/tmp}"
 readonly PREFIX="${PREFIX:-base}"
 readonly IREE_BENCHMARK="$(which iree-benchmark-module)"
 readonly HIP_DEVICE="$1"
-readonly INPUT_PATH="${INPUT_PATH:-${SCRIPT_DIR}/8b_npys/prefill_args_bs4_128_stride_32}"
+readonly INPUT_PATH="${INPUT_PATH:-${SCRIPT_DIR}/8b_npys/prefill_decode_bs4_128_args}"
 
-readonly INPUTS="--input=@${INPUT_PATH}/tokens.npy \
-  --input=@${INPUT_PATH}/seq_lens.npy \
-  --input=@${INPUT_PATH}/seq_block_ids.npy \
-  --input=@${INPUT_PATH}/cs_f16.npy"
+readonly -a INPUTS=(
+  "--input=@${INPUT_PATH}/prefill_token_ids.npy"
+  "--input=@${INPUT_PATH}/prefill_seq_lens.npy"
+  "--input=@${INPUT_PATH}/prefill_seq_block_ids.npy"
+  "--input=@${INPUT_PATH}/prefill_cache_state.npy"
+)
 
 # IRPA file:
 # Size: 16061181952
@@ -39,5 +41,5 @@ set -x
   --module="${WORKING_DIR}/${PREFIX}.8b_fp16_nondecomposed.vmfb" \
   --parameters=model="${IRPA}" \
   --function=prefill_bs4 \
-  $INPUTS \
+  "${INPUTS[@]}" \
   --benchmark_repetitions=3

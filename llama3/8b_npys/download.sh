@@ -5,21 +5,27 @@ set -xeuo pipefail
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
 cd "${SCRIPT_DIR}"
 
-mkdir -p prefill_args_bs4_128_stride_32
-cd prefill_args_bs4_128_stride_32
-wget https://sharkpublic.blob.core.windows.net/sharkpublic/halo-models/llm-dev/llama3_8b/prefill_args_bs4_128_stride_32/cs_f16.npy
-wget https://sharkpublic.blob.core.windows.net/sharkpublic/halo-models/llm-dev/llama3_8b/prefill_args_bs4_128_stride_32/seq_block_ids.npy
-wget https://sharkpublic.blob.core.windows.net/sharkpublic/halo-models/llm-dev/llama3_8b/prefill_args_bs4_128_stride_32/seq_lens.npy
-wget https://sharkpublic.blob.core.windows.net/sharkpublic/halo-models/llm-dev/llama3_8b/prefill_args_bs4_128_stride_32/tokens.npy
+readonly URL_PREFIX="https://sharkpublic.blob.core.windows.net/sharkpublic/halo-models/llm-dev/llama3_8b"
 
-cd ..
+for SEQ_LEN in 128 8k 16k ; do
+  echo "Get bs4 ${SEQ_LEN} seq len args"
 
-mkdir -p decode_args_bs4_128_stride_32
-cd decode_args_bs4_128_stride_32
-wget https://sharkpublic.blob.core.windows.net/sharkpublic/halo-models/llm-dev/llama3_8b/decode_args_bs4_128_stride_32/cs_f16.npy
-wget https://sharkpublic.blob.core.windows.net/sharkpublic/halo-models/llm-dev/llama3_8b/decode_args_bs4_128_stride_32/seq_block_ids.npy
-wget https://sharkpublic.blob.core.windows.net/sharkpublic/halo-models/llm-dev/llama3_8b/decode_args_bs4_128_stride_32/start_positions.npy
-wget https://sharkpublic.blob.core.windows.net/sharkpublic/halo-models/llm-dev/llama3_8b/decode_args_bs4_128_stride_32/seq_lens.npy
-wget https://sharkpublic.blob.core.windows.net/sharkpublic/halo-models/llm-dev/llama3_8b/decode_args_bs4_128_stride_32/next_tokens.npy
+  mkdir -p "args_bs4_${SEQ_LEN}"
+  cd "args_bs4_${SEQ_LEN}"
+
+  URL="${URL_PREFIX}/prefill_decode_bs4_${SEQ_LEN}_args"
+
+  wget -q --show-progress "/prefill_token_ids.npy" &
+  wget -q --show-progress "${URL}/prefill_seq_lens.npy" &
+  wget -q --show-progress "${URL}/prefill_seq_block_ids.npy" &
+  wget -q --show-progress "${URL}/prefill_cache_state.npy" &
+
+  wget -q --show-progress "${URL}/decode_next_tokens.npy" &
+  wget -q --show-progress "${URL}/decode_seq_lens.npy" &
+  wget -q --show-progress "${URL}/decode_seq_block_ids.npy" &
+  wget -q --show-progress "${URL}/decode_start_positions.npy" &
+  wget -q --show-progress "${URL}/decode_cache_state.npy"
+  cd ..
+done
 
 echo Done
