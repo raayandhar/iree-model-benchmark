@@ -15,7 +15,7 @@ for SEQ_LEN in 128 8k 16k ; do
 
   URL="${URL_PREFIX}/prefill_decode_bs4_${SEQ_LEN}_args"
 
-  wget -q --show-progress "/prefill_token_ids.npy" &
+  wget -q --show-progress "${URL}/prefill_token_ids.npy" &
   wget -q --show-progress "${URL}/prefill_seq_lens.npy" &
   wget -q --show-progress "${URL}/prefill_seq_block_ids.npy" &
   wget -q --show-progress "${URL}/prefill_cache_state.npy" &

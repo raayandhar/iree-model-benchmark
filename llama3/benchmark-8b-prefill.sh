@@ -14,7 +14,7 @@ readonly WORKING_DIR="${WORKING_DIR:-${SCRIPT_DIR}/tmp}"
 readonly PREFIX="${PREFIX:-base}"
 readonly IREE_BENCHMARK="$(which iree-benchmark-module)"
 readonly HIP_DEVICE="$1"
-readonly INPUT_PATH="${INPUT_PATH:-${SCRIPT_DIR}/8b_npys/prefill_decode_bs4_128_args}"
+readonly INPUT_PATH="${INPUT_PATH:-${SCRIPT_DIR}/8b_npys/args_bs4_128}"
 
 readonly -a INPUTS=(
   "--input=@${INPUT_PATH}/prefill_token_ids.npy"
