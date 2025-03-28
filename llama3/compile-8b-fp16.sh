@@ -21,5 +21,5 @@ set -x
 
 "${SCRIPT_DIR}/compile-8b-base.sh" "$IREE_COMPILE" "$CHIP" \
   "${SCRIPT_DIR}/base_ir/8b_fp16_nondecomposed.mlir" \
-  -o "${WORKING_DIR}/${PREFIX}.8b_fp16_nondecomposed.vmfb" \
+  -o "${WORKING_DIR}/${PREFIX}.8b_fp16.vmfb" \
   "$@"

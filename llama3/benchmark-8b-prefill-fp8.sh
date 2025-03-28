@@ -14,7 +14,7 @@ readonly WORKING_DIR="${WORKING_DIR:-${SCRIPT_DIR}/tmp}"
 readonly PREFIX="${PREFIX:-base}"
 readonly IREE_BENCHMARK="$(which iree-benchmark-module)"
 readonly HIP_DEVICE="$1"
-readonly INPUT_PATH="${INPUT_PATH:-${SCRIPT_DIR}/8b_npys/args_bs4_fp8_128}"
+readonly INPUT_PATH="${INPUT_PATH:-${SCRIPT_DIR}/inputs/8b_fp8/args_bs4_128}"
 readonly USE_TRACY="${USE_TRACY:-0}"
 readonly IREE_TRACY_CAPTURE="$(which iree-tracy-capture)"
 
@@ -26,9 +26,9 @@ readonly -a INPUTS=(
 )
 
 # IRPA file:
-# Size: 16061181952
-# md5sum: 8f4685d6799298609152dd509ba32e88
-readonly IRPA="${2:-/data/shark/8b_fp16.irpa}"
+# Size: 9081688064
+# md5sum: f810f1879a5853dab70721b1d0f3bf3b
+readonly IRPA="${2:-/data/shark/8b_fp8.irpa}"
 
 echo "Using IRPA file:"
 stat -c "%y %s %n" "${IRPA}"
@@ -36,25 +36,21 @@ stat -c "%y %s %n" "${IRPA}"
 
 set -x
 
+run_benchmark() {
+  TRACY_NO_EXIT="${USE_TRACY}" "$IREE_BENCHMARK" \
+    --device="hip://${HIP_DEVICE}" \
+    --device_allocator=caching \
+    --hip_use_streams=true \
+    --module="${WORKING_DIR}/${PREFIX}.8b_fp8.vmfb" \
+    --parameters=model="${IRPA}" \
+    --function=prefill_bs4 \
+    "${INPUTS[@]}" \
+    --benchmark_repetitions=3
+}
+
 if (( "${USE_TRACY}" == "1")); then
-    TRACY_NO_EXIT=1 "$IREE_BENCHMARK" \
-	--device="hip://${HIP_DEVICE}" \
-	--device_allocator=caching \
-	--hip_use_streams=true \
-	--module="${WORKING_DIR}/${PREFIX}.8b_fp8.vmfb" \
-	--parameters=model="${IRPA}" \
-	--function=prefill_bs4 \
-	"${INPUTS[@]}" \
-	--benchmark_repetitions=3 &
-    ${IREE_TRACY_CAPTURE} -f -o ${WORKING_DIR}/${PREFIX}.8b_fp8.tracy
+  run_benchmark &
+  ${IREE_TRACY_CAPTURE} -f -o ${WORKING_DIR}/${PREFIX}.8b_fp8.tracy
 else
-    "$IREE_BENCHMARK" \
-	--device="hip://${HIP_DEVICE}" \
-	--device_allocator=caching \
-	--hip_use_streams=true \
-	--module="${WORKING_DIR}/${PREFIX}.8b_fp8.vmfb" \
-	--parameters=model="${IRPA}" \
-	--function=prefill_bs4 \
-	"${INPUTS[@]}" \
-	--benchmark_repetitions=3
+  run_benchmark
 fi

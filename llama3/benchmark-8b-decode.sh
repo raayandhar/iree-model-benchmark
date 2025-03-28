@@ -14,7 +14,7 @@ readonly WORKING_DIR="${WORKING_DIR:-${SCRIPT_DIR}/tmp}"
 readonly PREFIX="${PREFIX:-base}"
 readonly IREE_BENCHMARK="$(which iree-benchmark-module)"
 readonly HIP_DEVICE="$1"
-readonly INPUT_PATH="${INPUT_PATH:-${SCRIPT_DIR}/8b_npys/args_bs4_128}"
+readonly INPUT_PATH="${INPUT_PATH:-${SCRIPT_DIR}/inputs/8b_fp16/args_bs4_128}"
 
 readonly -a INPUTS=(
   "--input=@${INPUT_PATH}/decode_next_tokens.npy"
@@ -39,7 +39,7 @@ set -x
   --device="hip://${HIP_DEVICE}" \
   --device_allocator=caching \
   --hip_use_streams=true \
-  --module="${WORKING_DIR}/${PREFIX}.8b_fp16_nondecomposed.vmfb" \
+  --module="${WORKING_DIR}/${PREFIX}.8b_fp16.vmfb" \
   --parameters=model="${IRPA}" \
   --function=decode_bs4  \
   "${INPUTS[@]}" \
