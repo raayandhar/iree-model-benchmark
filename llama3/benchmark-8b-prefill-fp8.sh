@@ -26,8 +26,8 @@ readonly -a INPUTS=(
 )
 
 # IRPA file:
-# Size: 9081688064
-# md5sum: f810f1879a5853dab70721b1d0f3bf3b
+# Size: 9081761792
+# md5sum: da94d6e49c55322335374ac3e8585e32
 readonly IRPA="${2:-/data/shark/8b_fp8.irpa}"
 
 echo "Using IRPA file:"
@@ -37,7 +37,7 @@ stat -c "%y %s %n" "${IRPA}"
 set -x
 
 run_benchmark() {
-  TRACY_NO_EXIT="${USE_TRACY}" "$IREE_BENCHMARK" \
+  "$IREE_BENCHMARK" \
     --device="hip://${HIP_DEVICE}" \
     --device_allocator=caching \
     --hip_use_streams=true \
@@ -49,7 +49,7 @@ run_benchmark() {
 }
 
 if (( "${USE_TRACY}" == "1")); then
-  run_benchmark &
+  IREE_PY_RUNTIME=tracy TRACY_NO_EXIT=1 run_benchmark &
   ${IREE_TRACY_CAPTURE} -f -o ${WORKING_DIR}/${PREFIX}.8b_fp8.tracy
 else
   run_benchmark
