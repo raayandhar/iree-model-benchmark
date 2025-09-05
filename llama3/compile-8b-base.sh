@@ -14,6 +14,7 @@ if [ ! -f "$IREE_COMPILE" ] ; then
   exit 1
 fi
 readonly USE_TRACY="${USE_TRACY:-0}"
+readonly DATA_TILING="${DATA_TILING:-0}"
 
 readonly CHIP="$2"
 
@@ -27,33 +28,33 @@ shift 3
 
 set -x
 
-if (( "${USE_TRACY}" == "1")); then
-    "$IREE_COMPILE" "$INPUT" \
-		    --iree-hal-target-backends=rocm \
-		    --iree-hip-target=$CHIP \
-		    --iree-hal-target-device=hip \
-		    --iree-opt-level=O3 \
-		    --iree-dispatch-creation-propagate-collapse-across-expands=true \
-			--iree-codegen-enable-default-tuning-specs=true \
-			--iree-hip-enable-tensor-ukernels \
-		    --iree-hal-indirect-command-buffers=true \
-		    --iree-stream-resource-memory-model=discrete \
-		    --iree-hip-specialize-dispatches \
-		    --iree-hal-memoization=true \
-		    --iree-hal-executable-debug-level=3 \
-		    "$@"
-else
-    "$IREE_COMPILE" "$INPUT" \
-		    --iree-hal-target-backends=rocm \
-		    --iree-hip-target=$CHIP \
-		    --iree-hal-target-device=hip \
-		    --iree-opt-level=O3 \
-		    --iree-dispatch-creation-propagate-collapse-across-expands=true \
-			--iree-codegen-enable-default-tuning-specs=true \
-			--iree-hip-enable-tensor-ukernels \
-		    --iree-hal-indirect-command-buffers=true \
-		    --iree-stream-resource-memory-model=discrete \
-		    --iree-hip-specialize-dispatches \
-		    --iree-hal-memoization=true \
-		    "$@"
+IREE_COMPILATION_FLAGS=(
+	"--iree-hal-target-backends=rocm"
+	"--iree-hip-target=$CHIP"
+	"--iree-hal-target-device=hip"
+	"--iree-opt-level=O3"
+	"--iree-dispatch-creation-propagate-collapse-across-expands=true"
+	"--iree-codegen-enable-default-tuning-specs=true"
+	"--iree-hip-enable-tensor-ukernels"
+	"--iree-hal-indirect-command-buffers=true"
+	"--iree-stream-resource-memory-model=discrete"
+	"--iree-hip-specialize-dispatches"
+	"--iree-hal-memoization=true"
+)
+
+if (( "${DATA_TILING}" == "1")); then
+	IREE_COMPILATION_FLAGS+=(
+		"--iree-opt-data-tiling=false"
+		"--iree-dispatch-creation-data-tiling"
+		"--iree-hip-encoding-layout-resolver=data-tiling"
+		"--iree-llvmgpu-test-combine-layout-transformation"
+	)
 fi
+
+if (( "${USE_TRACY}" == "1")); then
+	IREE_COMPILATION_FLAGS+=(
+		"--iree-hal-executable-debug-level=3"
+	)
+fi
+
+"$IREE_COMPILE" "$INPUT" "${IREE_COMPILATION_FLAGS[@]}" "$@"
