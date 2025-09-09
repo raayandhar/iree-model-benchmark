@@ -41,7 +41,6 @@ set -x
     --iree-vm-target-truncate-unsupported-floats \
     --iree-codegen-llvmgpu-use-vector-distribution \
     --iree-llvmgpu-enable-prefetch \
-    --iree-codegen-gpu-native-math-precision=true \
     --iree-dispatch-creation-enable-aggressive-fusion=true \
     --iree-dispatch-creation-enable-fuse-horizontal-contractions=true \
     --iree-opt-aggressively-propagate-transposes=true \

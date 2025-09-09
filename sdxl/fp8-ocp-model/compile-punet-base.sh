@@ -38,7 +38,6 @@ set -x
     --iree-dispatch-creation-enable-aggressive-fusion \
     --iree-hal-force-indirect-command-buffers \
     --iree-llvmgpu-enable-prefetch=1 \
-    --iree-codegen-gpu-native-math-precision=1 \
     --iree-opt-data-tiling=0 \
     --iree-hal-memoization=1 \
     --iree-opt-strip-assertions \
