@@ -5,7 +5,7 @@
 set -euo pipefail
 
 if (( $# != 2 && $# != 3 )); then
-  echo "usage: $0 <hip-device-id> <seq-length:[128|2048]> [<ipra-path>]"
+  echo "usage: $0 <hip-device-id> <seq-length:[128|2048]> [<irpa-path>]"
   exit 1
 fi
 

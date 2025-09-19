@@ -5,7 +5,7 @@
 set -xeu
 
 if (( $# != 1 && $# != 2 )); then
-  echo "usage: $0 <hip-device-id> [<ipra-path-prefix>]"
+  echo "usage: $0 <hip-device-id> [<irpa-path-prefix>]"
   exit 1
 fi
 

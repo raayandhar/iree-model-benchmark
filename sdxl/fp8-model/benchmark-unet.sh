@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Usage: PATH=/path/to/iree/build/tools:$PATH ./benchmark-unet.sh <hip-device-id> <batch-size> [<ipra-path-prefix>]
+# Usage: PATH=/path/to/iree/build/tools:$PATH ./benchmark-unet.sh <hip-device-id> <batch-size> [<irpa-path-prefix>]
 
 set -xeu
 
 if (( $# != 2 && $# != 3 )); then
-  echo "usage: $0 <hip-device-id> <batch-size> [<ipra-path-prefix>]"
+  echo "usage: $0 <hip-device-id> <batch-size> [<irpa-path-prefix>]"
   exit 1
 fi
 

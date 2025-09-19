@@ -32,17 +32,13 @@ set -x
 
 "$IREE_COMPILE" "$INPUT" \
     --iree-hal-target-backends=rocm \
-    --iree-hip-target="$CHIP" \
-    --iree-opt-const-eval=false \
-    --iree-opt-data-tiling=false \
-    --iree-global-opt-propagate-transposes=true \
-    --iree-opt-aggressively-propagate-transposes=true \
-    --iree-opt-outer-dim-concat=true \
-    --iree-dispatch-creation-enable-aggressive-fusion \
+    --iree-hip-target=$CHIP \
+    --iree-execution-model=async-external \
+    --iree-opt-level=O3 \
     --iree-vm-target-truncate-unsupported-floats \
     --iree-codegen-llvmgpu-use-vector-distribution \
-    --iree-llvmgpu-enable-prefetch \
-    --iree-codegen-gpu-native-math-precision=true \
+    --iree-llvmgpu-enable-prefetch=1 \
+    --iree-config-add-tuner-attributes \
     --iree-execution-model=async-external \
     "${FLAGS[@]}" \
     "$@"
