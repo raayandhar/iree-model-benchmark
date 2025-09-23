@@ -37,8 +37,6 @@ set -x
     --iree-opt-level=O3 \
     --iree-vm-target-truncate-unsupported-floats \
     --iree-codegen-llvmgpu-use-vector-distribution \
-    --iree-llvmgpu-enable-prefetch=1 \
-    --iree-config-add-tuner-attributes \
     --iree-execution-model=async-external \
     "${FLAGS[@]}" \
     "$@"

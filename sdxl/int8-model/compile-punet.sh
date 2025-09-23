@@ -4,6 +4,11 @@
 
 set -euo pipefail
 
+if (( $# < 1 )); then
+  echo "usage: $0 <target-chip> [extra flags]"
+  exit 1
+fi
+
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
 
 readonly IREE_COMPILE="$(which iree-compile)"
@@ -12,7 +17,6 @@ WORKING_DIR="${WORKING_DIR:-${SCRIPT_DIR}}"
 shift
 
 set -x
-
 
 "${SCRIPT_DIR}/compile-punet-base.sh" "$IREE_COMPILE" "$CHIP" \
   "${SCRIPT_DIR}/base_ir/punet_07_18.mlir" \

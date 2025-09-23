@@ -5,6 +5,11 @@
 set -euo pipefail
 
 if (( $# < 1 )); then
+  echo "usage: $0 <target-chip> [extra flags]"
+  exit 1
+fi
+
+if (( $# < 1 )); then
   echo "usage: $0 <hip-target-chip>"
   exit 1
 fi
