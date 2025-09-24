@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: PATH=/path/to/iree/build/tools:$PATH ./benchmark-unet-fp8.sh <hip-device-id> [<irpa-path-prefix>]
+# Usage: PATH=/path/to/iree/build/tools:$PATH ./benchmark-unet.sh <hip-device-id> [<irpa-path-prefix>]
 
 set -euo pipefail
 set -x
