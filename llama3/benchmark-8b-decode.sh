@@ -5,7 +5,7 @@
 set -euo pipefail
 
 if (( $# != 1 && $# != 2 )); then
-  echo "usage: $0 <hip-device-id> [<ipra-path>]"
+  echo "usage: $0 <hip-device-id> [<irpa-path>]"
   exit 1
 fi
 

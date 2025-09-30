@@ -4,6 +4,11 @@
 
 set -euo pipefail
 
+if (( $# < 1 )); then
+  echo "usage: $0 <target-chip> [extra flags]"
+  exit 1
+fi
+
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
 
 readonly IREE_COMPILE="$(which iree-compile)"
